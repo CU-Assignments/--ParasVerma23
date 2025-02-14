@@ -1,0 +1,64 @@
+#include <iostream>
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+// Function to remove duplicates from sorted list
+ListNode* deleteDuplicates(ListNode* head) {
+    if (!head) return nullptr;
+
+    ListNode dummy(0); // Dummy node before the actual head
+    dummy.next = head;
+    ListNode* prev = &dummy; // Pointer to track last unique node
+
+    while (head) {
+        bool isDuplicate = false;
+        // Check for duplicates
+        while (head->next && head->val == head->next->val) {
+            head = head->next;
+            isDuplicate = true;
+        }
+
+        if (isDuplicate) {
+            prev->next = head->next; // Skip all duplicates
+        } else {
+            prev = prev->next; // Move forward only if unique
+        }
+
+        head = head->next; // Move forward
+    }
+
+    return dummy.next; // Return the modified list
+}
+
+// Utility function to print a linked list
+void printList(ListNode* head) {
+    while (head) {
+        std::cout << head->val << " -> ";
+        head = head->next;
+    }
+    std::cout << "NULL\n";
+}
+
+// Driver code to test the function
+int main() {
+    // Creating sorted linked list: 1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5
+    ListNode* head = new ListNode(1);
+    head->next = new ListNode(2);
+    head->next->next = new ListNode(3);
+    head->next->next->next = new ListNode(3);
+    head->next->next->next->next = new ListNode(4);
+    head->next->next->next->next->next = new ListNode(4);
+    head->next->next->next->next->next->next = new ListNode(5);
+
+    // Removing duplicates
+    ListNode* newHead = deleteDuplicates(head);
+
+    // Printing the modified list
+    printList(newHead);
+
+    return 0;
+}
